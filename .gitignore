@@ -3,3 +3,4 @@
 /wp-content/themes/twentytwentytwo
 /wp-content/plugins/akismet
 /wp-content/plugins/wp-graphql
+/.env

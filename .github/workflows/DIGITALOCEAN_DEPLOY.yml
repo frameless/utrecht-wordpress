@@ -1,0 +1,29 @@
+name: DIGITALOCEAN_DEPLOY
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  Build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@main
+      - name: Make envfile frontend
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_DEBUG: false
+          envkey_PHP_MY_ADMIN_PORT: ${{ secrets.PHP_MY_ADMIN_PORT }}
+          envkey_WORDPRESS_PORT: ${{ secrets.WORDPRESS_PORT }}
+          envkey_MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          envkey_MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          envkey_MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          envkey_MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          envkey_WORDPRESS_DB_HOST: ${{ secrets.WORDPRESS_DB_HOST }}
+          envkey_WORDPRESS_DB_USER: ${{ secrets.WORDPRESS_DB_USER }}
+          envkey_WORDPRESS_DB_PASSWORD: ${{ secrets.WORDPRESS_DB_PASSWORD }}
+          file_name: .env
+          fail_on_empty: false
+      - name: Run build
+        run: docker-compose up -d
