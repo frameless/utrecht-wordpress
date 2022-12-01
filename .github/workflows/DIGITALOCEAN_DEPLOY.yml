@@ -25,5 +25,9 @@ jobs:
           envkey_WORDPRESS_DB_PASSWORD: ${{ secrets.WORDPRESS_DB_PASSWORD }}
           file_name: .env
           fail_on_empty: false
+      - name: Docker build
+        run: docker-compose build
+      - name: Docker down
+        run: docker-compose down
       - name: Run build
         run: docker-compose up -d
