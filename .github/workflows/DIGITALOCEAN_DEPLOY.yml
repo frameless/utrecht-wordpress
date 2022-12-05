@@ -13,7 +13,9 @@ jobs:
         uses: docker://alpine
         with:
           args: /bin/sh -c "rm -rf /github/workspace/.* || rm -rf /github/workspace/*"
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
       - name: "Create env file"
         run: |
           touch .env
@@ -27,9 +29,14 @@ jobs:
           echo WORDPRESS_DB_USER=${{ secrets.WORDPRESS_DB_USER }} >> .env
           echo WORDPRESS_DB_PASSWORD=${{ secrets.WORDPRESS_DB_PASSWORD }} >> .env
           cat .env
+
+      - name: Install denhaag wp plugin dependencies
+        run: cd ./wp-content/plugins/denhaag-wordpress-plugin && npm ci
+      - name: Build denhaag wp plugin
+        run: cd ./wp-content/plugins/denhaag-wordpress-plugin && npm run build
       - name: Docker build
         run: docker-compose build
       - name: Docker down
         run: docker-compose down
-      - name: Run build
+      - name: Start server
         run: docker-compose up -d
