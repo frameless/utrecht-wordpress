@@ -1,4 +1,4 @@
 [submodule "wp-content/plugins/denhaag-wordpress-plugin"]
 	path = wp-content/plugins/denhaag-wordpress-plugin
-	url = https://github.com/frameless/denhaag-wordpress-plugin
+	url = git@github.com:frameless/denhaag-wordpress-plugin.git
 	ignore = dirty
