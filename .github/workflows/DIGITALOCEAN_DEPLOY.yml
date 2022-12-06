@@ -32,7 +32,7 @@ jobs:
           cat .env
 
       - name: Install denhaag wp plugin dependencies
-        run: cd ../../wp-content/plugins/denhaag-wordpress-plugin && npm ci
+        run: cd ../../wp-content/plugins/denhaag-wordpress-plugin && npm install
       - name: Build denhaag wp plugin
         run: cd ../../wp-content/plugins/denhaag-wordpress-plugin && npm run build
       - name: Docker build
