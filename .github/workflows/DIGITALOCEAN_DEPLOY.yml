@@ -30,7 +30,12 @@ jobs:
           echo WORDPRESS_DB_USER=${{ secrets.WORDPRESS_DB_USER }} >> .env
           echo WORDPRESS_DB_PASSWORD=${{ secrets.WORDPRESS_DB_PASSWORD }} >> .env
           cat .env
-
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: wp-content/plugins/denhaag-wordpress-plugin/package-lock.json
       - name: Install denhaag wp plugin dependencies
         working-directory: ./wp-content/plugins/denhaag-wordpress-plugin
         run: npm ci
