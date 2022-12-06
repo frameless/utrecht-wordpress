@@ -5,9 +5,38 @@ on:
     branches: [main]
 
 jobs:
+  build_npm_packages:
+    runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: ./wp-content/plugins/denhaag-wordpress-plugin
+
+    steps:
+      - name: Clean the workspace
+        uses: docker://alpine
+        with:
+          args: /bin/sh -c "rm -rf /github/workspace/.* || rm -rf /github/workspace/*"
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+          token: ${{ secrets.GH_TOKEN }}
+      - name: Install denhaag wp plugin dependencies
+        uses: docker://node:16-alpine
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: "npm"
+          cache-dependency-path: ./wp-content/plugins/denhaag-wordpress-plugin/package-lock.json
+      - name: Install dependencies
+        run: npm install
+      - name: Build denhaag-wordpress-plugin
+        run: npm run build
+        # with:
+        #   args: /bin/sh -c "cd /github/workspace/wp-content/plugins/denhaag-wordpress-plugin && npm ci && npm run build"
+
   Build:
     runs-on: self-hosted
-
+    needs: build_npm_packages
     steps:
       - name: Clean the workspace
         uses: docker://alpine
@@ -30,18 +59,7 @@ jobs:
           echo WORDPRESS_DB_USER=${{ secrets.WORDPRESS_DB_USER }} >> .env
           echo WORDPRESS_DB_PASSWORD=${{ secrets.WORDPRESS_DB_PASSWORD }} >> .env
           cat .env
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: "npm"
-          cache-dependency-path: wp-content/plugins/denhaag-wordpress-plugin/package-lock.json
-      - name: Install denhaag wp plugin dependencies
-        working-directory: ./wp-content/plugins/denhaag-wordpress-plugin
-        run: npm ci
-      - name: Build denhaag wp plugin
-        working-directory: ./wp-content/plugins/denhaag-wordpress-plugin
-        run: npm run build
+
       - name: Docker build
         run: docker-compose build
       - name: Docker down
