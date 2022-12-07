@@ -15,24 +15,19 @@ jobs:
       - name: Clean the workspace
         uses: docker://alpine
         with:
-          args: /bin/sh -c "rm -rf /github/workspace/.* || rm -rf /github/workspace/*"
+          args: /bin/sh -c "rm -rf /github/workspace/.* ||  rm -rf /github/workspace/*"
       - uses: actions/checkout@v3
         with:
           submodules: true
           token: ${{ secrets.GH_TOKEN }}
-      - name: Install denhaag wp plugin dependencies
-        uses: docker://node:16-alpine
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: "npm"
           cache-dependency-path: ./wp-content/plugins/denhaag-wordpress-plugin/package-lock.json
       - name: Install dependencies
-        run: npm install
-      - name: Build denhaag-wordpress-plugin
+        run: npm set registry=https://registry.npmjs.org/ && npm install
+      - name: Build denhaag wordpress plugin
         run: npm run build
-        # with:
-        #   args: /bin/sh -c "cd /github/workspace/wp-content/plugins/denhaag-wordpress-plugin && npm ci && npm run build"
 
   Build:
     runs-on: self-hosted
