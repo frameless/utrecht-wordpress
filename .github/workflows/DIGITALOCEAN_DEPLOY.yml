@@ -28,15 +28,46 @@ jobs:
         run: npm set registry=https://registry.npmjs.org/ && npm install
       - name: Build denhaag wordpress plugin
         run: npm run build
+  install_samenwerkende_catalogi:
+    runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: ./wp-content/plugins/plugin-samenwerkende-catalogi
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+      - name: Install dependencies
+        uses: php-actions/composer@v6
+        with:
+          command: composer install
+  install_pdc_base_master:
+    runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: ./wp-content/plugins/plugin-pdc-base-master
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+      - name: Install dependencies
+        uses: php-actions/composer@v6
+        with:
+          command: composer install
 
   Build:
     runs-on: self-hosted
-    needs: build_npm_packages
+    needs: [build_npm_packages, install_samenwerkende_catalogi]
     steps:
-      # - name: Clean the workspace
-      #   uses: docker://alpine
-      #   with:
-      #     args: /bin/sh -c "rm -rf /github/workspace/.* || rm -rf /github/workspace/*"
       - uses: actions/checkout@v3
         with:
           submodules: true

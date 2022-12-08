@@ -1,0 +1,42 @@
+{
+  "name": "plugin/pdc-base",
+  "description": "PDC Base plugin",
+  "authors": [
+    {
+      "name": "Yard | Digital Agency",
+      "email": "info@yard.nl",
+      "homepage": "https://www.yard.nl"
+    }
+  ],
+  "type": "wordpress-plugin",
+  "require": {
+    "php": ">=7.0",
+    "johnbillion/extended-cpts": "^4.0"
+  },
+  "require-dev": {
+    "10up/wp_mock": "~0.4",
+    "friendsofphp/php-cs-fixer": "^2.0",
+    "mockery/mockery": "*",
+    "phpunit/phpunit": "~8.0",
+    "szepeviktor/phpstan-wordpress": "^0.7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "OWC\\PDC\\Base\\": "./src/Base"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "OWC\\PDC\\Base\\Tests\\": "./tests"
+    }
+  },
+  "scripts": {
+    "format": "./vendor/bin/php-cs-fixer fix",
+    "phpstan": "./vendor/bin/phpstan analyse --no-progress  --memory-limit 500M",
+    "test": [
+      "@unit"
+    ],
+    "unit": "clear && ./vendor/bin/phpunit --testdox --stderr --testsuite 'Unit Test Suite' --colors=always",
+    "unit-coverage": "clear && XDEBUG_MODE=coverage ./vendor/bin/phpunit --stderr --testsuite 'Unit Test Suite' --prepend tests/xdebug-filter.php --colors=always --coverage-html ./tests/coverage"
+  }
+}
