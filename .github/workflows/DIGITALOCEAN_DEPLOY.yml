@@ -5,21 +5,26 @@ on:
     branches: [main]
 
 jobs:
+  clean_workspace:
+    runs-on: self-hosted
+    steps:
+      - name: Clean the workspace
+        uses: docker://alpine
+        with:
+          args: /bin/sh -c "rm -rf /github/workspace/* /github/workspace/.* || true 2>/dev/null"
+      - name: Work Space Init
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+          token: ${{ secrets.GH_TOKEN }}
   build_npm_packages:
     runs-on: self-hosted
+    needs: clean_workspace
     defaults:
       run:
         working-directory: ./wp-content/plugins/denhaag-wordpress-plugin
 
     steps:
-      - name: Clean the workspace
-        uses: docker://alpine
-        with:
-          args: /bin/sh -c "rm -rf /github/workspace/.* ||  rm -rf /github/workspace/*"
-      - uses: actions/checkout@v3
-        with:
-          submodules: true
-          token: ${{ secrets.GH_TOKEN }}
       - uses: actions/setup-node@v3
         with:
           node-version: 16
@@ -30,48 +35,36 @@ jobs:
         run: npm run build
   install_samenwerkende_catalogi:
     runs-on: self-hosted
+    needs: clean_workspace
     defaults:
       run:
         working-directory: ./wp-content/plugins/plugin-samenwerkende-catalogi
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: docker://composer:2
         with:
-          submodules: true
-      - name: Cache Composer dependencies
-        uses: actions/cache@v3
-        with:
-          path: /tmp/composer-cache
-          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
-      - name: Install dependencies
-        uses: php-actions/composer@v6
-        with:
-          command: composer install
+          args: /bin/sh -c "cd ./wp-content/plugins/plugin-pdc-base-master && composer install"
+
   install_pdc_base_master:
     runs-on: self-hosted
+    needs: clean_workspace
     defaults:
       run:
         working-directory: ./wp-content/plugins/plugin-pdc-base-master
     steps:
-      - uses: actions/checkout@v3
-      - name: Cache Composer dependencies
-        uses: actions/cache@v3
+      - uses: docker://composer:2
         with:
-          path: /tmp/composer-cache
-          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
-      - name: Install dependencies
-        uses: php-actions/composer@v6
-        with:
-          command: composer install
+          args: /bin/sh -c "cd ./wp-content/plugins/plugin-pdc-base-master && composer install"
 
   Build:
     runs-on: self-hosted
-    needs: [build_npm_packages, install_samenwerkende_catalogi]
+    needs:
+      [
+        build_npm_packages,
+        install_pdc_base_master,
+        install_samenwerkende_catalogi,
+      ]
     steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: true
-          token: ${{ secrets.GH_TOKEN }}
       - name: "Create env file"
         run: |
           touch .env
