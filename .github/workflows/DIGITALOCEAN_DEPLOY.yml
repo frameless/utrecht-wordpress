@@ -36,21 +36,14 @@ jobs:
   install_samenwerkende_catalogi:
     runs-on: self-hosted
     needs: clean_workspace
-    defaults:
-      run:
-        working-directory: ./wp-content/plugins/plugin-samenwerkende-catalogi
-
     steps:
       - uses: docker://composer:2
         with:
-          args: /bin/sh -c "cd ./wp-content/plugins/plugin-pdc-base-master && composer install"
+          args: /bin/sh -c "cd ./wp-content/plugins/plugin-samenwerkende-catalogi && composer install"
 
   install_pdc_base_master:
     runs-on: self-hosted
     needs: clean_workspace
-    defaults:
-      run:
-        working-directory: ./wp-content/plugins/plugin-pdc-base-master
     steps:
       - uses: docker://composer:2
         with:
