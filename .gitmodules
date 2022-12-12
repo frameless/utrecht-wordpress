@@ -7,4 +7,4 @@
 	url = https://github.com/OpenWebconcept/plugin-samenwerkende-catalogi
 [submodule "wp-content/plugins/pdc-base"]
 	path = wp-content/plugins/pdc-base
-	url = https://github.com/OpenWebconcept/plugin-pdc-base
+	url = git@github.com:frameless/plugin-pdc-base.git
