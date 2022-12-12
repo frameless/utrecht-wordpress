@@ -33,7 +33,7 @@ jobs:
         run: npm set registry=https://registry.npmjs.org/ && npm install
       - name: Build denhaag wordpress plugin
         run: npm run build
-  install_samenwerkende_catalogi:
+  install_pdc_samenwerkende_catalogi:
     runs-on: self-hosted
     needs: clean_workspace
     steps:
@@ -49,13 +49,31 @@ jobs:
         with:
           args: /bin/sh -c "cd ./wp-content/plugins/pdc-base && composer install"
 
+  install_pdc_faq:
+    runs-on: self-hosted
+    needs: clean_workspace
+    steps:
+      - uses: docker://composer:2
+        with:
+          args: /bin/sh -c "cd ./wp-content/plugins/pdc-faq && composer install"
+
+  install_pdc_leges:
+    runs-on: self-hosted
+    needs: clean_workspace
+    steps:
+      - uses: docker://composer:2
+        with:
+          args: /bin/sh -c "cd ./wp-content/plugins/pdc-leges && composer install"
+
   Build:
     runs-on: self-hosted
     needs:
       [
         build_npm_packages,
         install_pdc_base_master,
-        install_samenwerkende_catalogi,
+        install_pdc_samenwerkende_catalogi,
+        install_pdc_leges,
+        install_pdc_faq,
       ]
     steps:
       - name: "Create env file"
