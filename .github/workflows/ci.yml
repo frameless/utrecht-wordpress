@@ -1,0 +1,36 @@
+name: CI
+
+on: [push]
+
+jobs:
+  clone:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Work Space Init
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+          token: ${{ secrets.GH_TOKEN }}
+  
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache-dependency-path: ./wp-content/plugins/denhaag-wordpress-plugin/package-lock.json
+      - name: Install dependencies
+        run: |
+          npm set registry=https://registry.npmjs.org/
+          cd ./wp-content/plugins/denhaag-wordpress-plugin
+          npm install
+
+      - name: Build denhaag wordpress plugin
+        run: |
+          cd ./wp-content/plugins/denhaag-wordpress-plugin
+          npm run build
+
+      - uses: docker://composer:2
+        with:
+          args: /bin/sh -c "cd ./wp-content/plugins/pdc-samenwerkende-catalogi && composer install"
+
+      - uses: docker://composer:2
+        with:
+          args: /bin/sh -c "cd ./wp-content/plugins/pdc-base && composer install"
