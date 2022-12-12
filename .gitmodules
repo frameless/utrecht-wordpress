@@ -5,3 +5,6 @@
 [submodule "wp-content/plugins/plugin-samenwerkende-catalogi"]
 	path = wp-content/plugins/plugin-samenwerkende-catalogi
 	url = https://github.com/OpenWebconcept/plugin-samenwerkende-catalogi
+[submodule "wp-content/plugins/pdc-base"]
+	path = wp-content/plugins/pdc-base
+	url = https://github.com/OpenWebconcept/plugin-pdc-base
