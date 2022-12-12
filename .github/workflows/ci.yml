@@ -34,3 +34,11 @@ jobs:
       - uses: docker://composer:2
         with:
           args: /bin/sh -c "cd ./wp-content/plugins/pdc-base && composer install"
+
+      - uses: docker://composer:2
+        with:
+          args: /bin/sh -c "cd ./wp-content/plugins/pdc-faq && composer install"
+
+      - uses: docker://composer:2
+        with:
+          args: /bin/sh -c "cd ./wp-content/plugins/pdc-leges && composer install"

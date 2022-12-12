@@ -8,3 +8,9 @@
 [submodule "wp-content/plugins/pdc-samenwerkende-catalogi"]
 	path = wp-content/plugins/pdc-samenwerkende-catalogi
 	url = git@github.com:OpenWebconcept/plugin-pdc-samenwerkende-catalogi.git
+[submodule "wp-content/plugins/pdc-leges"]
+	path = wp-content/plugins/pdc-leges
+	url = git@github.com:OpenWebconcept/plugin-pdc-leges.git
+[submodule "wp-content/plugins/pdc-faq"]
+	path = wp-content/plugins/pdc-faq
+	url = git@github.com:OpenWebconcept/plugin-pdc-faq.git
