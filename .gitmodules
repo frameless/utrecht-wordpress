@@ -2,9 +2,6 @@
 	path = wp-content/plugins/denhaag-wordpress-plugin
 	url = git@github.com:frameless/denhaag-wordpress-plugin.git
 	ignore = dirty
-[submodule "wp-content/plugins/plugin-samenwerkende-catalogi"]
-	path = wp-content/plugins/plugin-samenwerkende-catalogi
-	url = https://github.com/OpenWebconcept/plugin-samenwerkende-catalogi
 [submodule "wp-content/plugins/pdc-base"]
 	path = wp-content/plugins/pdc-base
 	url = git@github.com:frameless/plugin-pdc-base.git
