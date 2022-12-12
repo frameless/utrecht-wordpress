@@ -39,7 +39,7 @@ jobs:
     steps:
       - uses: docker://composer:2
         with:
-          args: /bin/sh -c "cd ./wp-content/plugins/plugin-samenwerkende-catalogi && composer install"
+          args: /bin/sh -c "cd ./wp-content/plugins/pdc-samenwerkende-catalogi && composer install"
 
   install_pdc_base_master:
     runs-on: self-hosted
@@ -47,7 +47,7 @@ jobs:
     steps:
       - uses: docker://composer:2
         with:
-          args: /bin/sh -c "cd ./wp-content/plugins/plugin-pdc-base-master && composer install"
+          args: /bin/sh -c "cd ./wp-content/plugins/pdc-base && composer install"
 
   Build:
     runs-on: self-hosted
